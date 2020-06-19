@@ -39,7 +39,6 @@ const CreatePoint: React.FC = () => {
     name: '',
     email: '',
     whatsapp: '',
-    number: '',
   });
 
   const [selectedUf, setSelectedUF] = useState('0'); 
@@ -128,7 +127,7 @@ const CreatePoint: React.FC = () => {
   const handleSubmit = useCallback(async (event: FormEvent) => {
     event.preventDefault();
 
-    const { name, email, whatsapp, number } = inputData;
+    const { name, email, whatsapp } = inputData;
     const uf = selectedUf;
     const city = selectedCity;
     const items = selectedItems;
@@ -139,7 +138,6 @@ const CreatePoint: React.FC = () => {
     data.append('name', name);
     data.append('email', email);
     data.append('whatsapp', whatsapp);
-    data.append('number', number);
     data.append('uf', uf);
     data.append('city', city);
     data.append('latitude', String(latitude));
@@ -217,32 +215,32 @@ const CreatePoint: React.FC = () => {
             </Map>
 
             <div className="field-group">
-              <div className="field">
+              {/*<div className="field">
                 <label htmlFor="number">Numero</label>
                 <input type="number" name="number" id="number" onChange={handleInputChange}/>
-              </div>
+              </div>*/}
 
               <div className="field">
-                <label htmlFor="number">Cidade</label>
-                <select name="city" id="city" value={selectedCity} onChange={handleSelectCity}>
-                  <option value="0">Selecione uma cidade</option>
-                  {cities.map(city => (
-                    <option key={city} value={city}>{city}</option>
+                <label htmlFor="name">Estado (UF)</label>
+                <select name="uf" id="uf" value={selectedUf} onChange={handleSelectUf} > 
+                  <option value="0">Selecione uma UF</option>
+                  {ufs.map(uf => (
+                    <option key={uf} value={uf}>{uf}</option>
                   ))}
                 </select>
               </div>
             </div>
 
             <div className="field">
-              <label htmlFor="name">Estado (UF)</label>
-              <select name="uf" id="uf" value={selectedUf} onChange={handleSelectUf} > 
-                <option value="0">Selecione uma UF</option>
-                {ufs.map(uf => (
-                  <option key={uf} value={uf}>{uf}</option>
+              <label htmlFor="number">Cidade</label>
+              <select name="city" id="city" value={selectedCity} onChange={handleSelectCity}>
+                <option value="0">Selecione uma cidade</option>
+                {cities.map(city => (
+                  <option key={city} value={city}>{city}</option>
                 ))}
               </select>
             </div>
-
+            
           </fieldset>
 
           <fieldset>
