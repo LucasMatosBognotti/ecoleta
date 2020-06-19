@@ -3,11 +3,11 @@ import knex from '../database/connection';
 
 class PointsController {
   async create(req: Request, res: Response) {
-    const { name, email, whatsapp, city, number, uf, latitude, longitude, items } = req.body;
+    const { name, email, whatsapp, city, uf, latitude, longitude, items } = req.body;
     
     const trx = await knex.transaction();
 
-    const point = { image: req.file.filename, name, email, whatsapp, city, number, uf, latitude, longitude };
+    const point = { image: req.file.filename, name, email, whatsapp, city, uf, latitude, longitude };
 
     const insertedIds = await trx('points').insert(point);
 
@@ -28,8 +28,6 @@ class PointsController {
       }
     });
 
-    console.log(pointItems);
-
     await trx('points_items').insert(pointItems);
 
     await trx.commit();
@@ -46,8 +44,6 @@ class PointsController {
 
     const parsedItems = String(items).split(',').map(item => Number(item.trim()));
 
-    console.log(parsedItems);
-
     const datapoints = await knex('points')
       .join('points_items', 'points.id', '=', 'points_items.point_id')
       .whereIn('points_items.item_id', parsedItems)
@@ -56,15 +52,15 @@ class PointsController {
       .distinct()
       .select('points.*');
 
-
     const points = datapoints.map(point => {
       return {
         ...point,
-        image_url: `${process.env.API_URL}/uploads/${point.image}`
+        image_url: `${process.env.API_URL}/tmp/${point.image}`
       }
     });
 
     return res.json(points);
+    
   }
 
   async show(req: Request, res: Response) {
@@ -78,13 +74,14 @@ class PointsController {
 
     const point = {
       ...datapoint,
-      image_url: `${process.env.API_URL}/uploads/${datapoint.image}`
+      image_url: `${process.env.API_URL}/tmp/${datapoint.image}`
     }
-
+    
     const items = await knex('items')
       .join('points_items', 'items.id', '=', 'points_items.item_id')
-      .where('points_items.point_id', id)
+      .where('points_items.point_id', datapoint.id)
       .select('items.title');
+
 
     return res.json({point, items});
   }
