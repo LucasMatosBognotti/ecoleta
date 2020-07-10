@@ -4,29 +4,31 @@ import { FiLogIn } from 'react-icons/fi';
 
 import logo from '../../assets/logo.svg';
 
-import './styles.css';
+import { Container, Content, Main, Span } from './styles';
+
+// import './styles.css';
 
 const Home: React.FC = () => {
   return (
-    <div id="page-home">
-      <div className="content">
+    <Container>
+      <Content>
         <header>
           <img src={logo} alt="Logo"/>
         </header>
 
-        <main>
+        <Main>
           <h1>Seu marketplace de coleta de residuos</h1>
           <p>Ajudamos pessoas a encontrar pontos de coleta de forma eficiente</p>
         
           <Link to="create-point">
-            <span>
+            <Span>
               <FiLogIn />
-            </span>
+            </Span>
             <strong>Cadastre um ponto de coleta</strong>
           </Link>
-        </main>
-      </div>
-    </div>
+        </Main>
+      </Content>
+    </Container>
   );
 }
 
